@@ -67,7 +67,7 @@ def rotationz(nodes,angle):
                   ])
   return np.dot(rotz, nodes)
 
-#-----------------------Focntion de zoom------------------- 
+#-----------------------Fonction de zoom------------------- 
 
 def zoom(nodes, p):
   z=np.array([
@@ -97,20 +97,55 @@ for i in range(8):
 cube_nodes = zoom(cube_nodes, 10000)
 cube_nodes=translation(cube_nodes, [800, 400,0]) 
 
-for i in range(8):
+'''for i in range(8):
   print(cube_edges[i])
 
 for i in range(3):
-  print(cube_nodes[i])
- 
-
-#----------------------Création de l'icosaêdre----------------
-
-
-#-------------------Fonction de dessin d'une figure-------------------------
+  print(cube_nodes[i])'''
 
 def taux(t):
   return 100+np.cos(t)
+ 
+
+#----------------------Création de la montagne----------------
+
+hill_nodes = [
+  [],
+  [],
+  []
+]
+
+for x in range(-200,200,25):
+  for y in range(-200, 200, 25):
+    z = -(x**2)/100. - (y**2)/100. + 100
+    hill_nodes[0].append(x)
+    hill_nodes[1].append(y)
+    hill_nodes[2].append(z)
+
+hill_nodes = np.array(hill_nodes)
+
+hill_edges = []
+
+for i in range(256):
+  line = []
+  for j in range(256):
+    line.append(False)
+  hill_edges.append(line)
+
+for i in range(256):
+  for j in range(256):
+    if distance(hill_nodes[0][i], hill_nodes[0][j], hill_nodes[1][i], hill_nodes[1][j],0,0)<26:
+      hill_edges[i][j] = True
+
+hill_nodes=rotationx(hill_nodes,90)
+hill_nodes=zoom(hill_nodes, 100)
+hill_nodes=translation(hill_nodes, [800,200,0])
+
+# z = (-(x² + y²))/100
+
+
+
+#-------------------Fonction de dessin d'une figure-------------------------
 
 def dessine(nodes,edges):
   for i in range(len(nodes[0])):
@@ -135,7 +170,8 @@ while True:
     can.delete(ALL)
 
     
-        
+    '''
+
     #Affichage et transformation d'objets
     cube_nodes=translation(cube_nodes, [-800, -400,0])
     cube_nodes=rotationx(cube_nodes,1)
@@ -145,7 +181,16 @@ while True:
     cube_nodes=translation(cube_nodes, [800, 400,0])
     dessine(cube_nodes, cube_edges)
     
-      
+      '''
+    hill_nodes=translation(hill_nodes, [-800, -200,0])
+    #
+    hill_nodes=rotationy(hill_nodes,1)
+    #hill_nodes=rotationz(hill_nodes,1)
+  
+    hill_nodes=translation(hill_nodes, [800, 200,0])
+    dessine(hill_nodes, hill_edges)
+
+    
 
 
 #juste pour mémoire de la syntaxe    
