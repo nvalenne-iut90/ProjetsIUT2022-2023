@@ -5,6 +5,11 @@
 #define LIMIT 16
 
 int main(int argc, char *argv[]){
+
+    if (argc <1){
+        return -1;
+    }
+
     FILE* source_file = NULL;
     char buffer[LIMIT];
     int caracs;
@@ -21,12 +26,13 @@ int main(int argc, char *argv[]){
     do {
         caracs= fread(buffer, sizeof(char), LIMIT , source_file);
         if (caracs > 0){
-            printf("%.7d0 :", ligne);
+            printf("%.7d0:", ligne);
             ligne += 1;
             for (int i = 0; i < LIMIT; i++){
                 if (i%2 == 0) printf(" ");
-                if (i<caracs)
-                    printf("%2x", buffer[i]);
+                if (i<caracs){
+                    printf("%02x", buffer[i]);
+                }
                 else
                     printf("  ");
             }
