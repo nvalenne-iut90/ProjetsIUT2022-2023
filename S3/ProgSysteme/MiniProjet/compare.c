@@ -6,7 +6,7 @@
 
 int main(int argc, char *argv[]){
 
-    if (argc < 3){
+    if (argc < 3){  // Si la commande n'est pas valide
         printf("Usage : compare command1 [arg1, ..., argn] -- command2 [arg1, ..., argn]\n");
         return 2;
     }
@@ -28,29 +28,17 @@ int main(int argc, char *argv[]){
     
     pid_t pid1 = fork(); // Création du processus exécutant la première commande
     if (pid1 == -1) {
-        // Il y a une erreur
         perror("fork");
         return 2;
     } else if (pid1 == 0) {
-        FILE *fp = freopen("TabA.txt", "w+", stdout);
-        if (fp == NULL){
+        FILE *fp = freopen("TabA.txt", "w+", stdout);   // Redirige la sortie standard vers le fichier TabA.txt
+        if (fp == NULL){    // Erreur : Ouverture du fichier TabA.txt
             perror("fopen TabA\n ");
             return 2;
         } 
         char * const argument_list[] = {tabA[0], tabA[1], NULL};
-        int status_code = execvp(tabA[0], argument_list);
-        if (status_code == -1) {
-            perror("Erreur exec1\n");
-            return 2;
-        }
-        if (fputs(tabA[1], fp) == EOF){
-            perror("fputs TabA\n ");
-            return 2;
-        } 
-        if (fclose(fp) == EOF){
-            perror("close TabA\n ");
-            return 2;
-        } 
+        execvp(tabA[0], argument_list);   // Exécute la première commande mise en paramètre avec ses arguments
+        return 2;
     }
 
     pid_t pid2 = fork(); // Création du processus exécutant la deuxième commande
@@ -58,28 +46,15 @@ int main(int argc, char *argv[]){
         perror("fork");
         return 2;
     } else if (pid2 == 0) {
-        FILE *fp = freopen("TabB.txt", "w+", stdout);
-        if (fp == NULL){
+        FILE *fp = freopen("TabB.txt", "w+", stdout);   // Redirige la sortie standard vers le fichier TabB.txt
+        if (fp == NULL){    // Erreur : Ouverture du fichier TabB.txt
             perror("fopen TabB\n ");
             return 2;
         } 
         char * const argument_list[] = {tabB[0], tabB[1], NULL};
-        int status_code = execvp(tabB[0], argument_list);
-        if (status_code == -1) {
-            perror("Erreur exec2\n");
-            return 2;
-        }
-        if (fputs(tabB[1], fp) == EOF){
-            perror("fputs TabB\n ");
-            return 2;
-        } 
-        if (fclose(fp) == EOF){
-            perror("close TabB\n ");
-            return 2;
-        } 
+        execvp(tabB[0], argument_list);   // Exécute la deuxième commande mise en paramètre avec ses arguments
+        return 2;
     }
-
-    int status_code = execlp("diff", "-u", "TabA.txt", "TabB.txt", NULL);
-
-    return 0;
+    execlp("diff", "-u", "TabA.txt", "TabB.txt", NULL);
+    return 2;
 }
