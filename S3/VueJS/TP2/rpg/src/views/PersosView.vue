@@ -3,10 +3,7 @@
     <v-row>
       <v-col class="col-2">
         <h1>Les personnages</h1>
-<!--        <select v-model="persoChoiced" id="persos">-->
-<!--          <option v-for="(perso, index) in persos" :key="index">{{perso.nom}}</option>-->
-<!--        </select>-->
-        <v-select :items="selectItems" v-model="persoChoiced"></v-select>
+        <v-select label="Sélectionner personnage" :items="selectItems" v-model="persoChoiced" ></v-select>
       </v-col>
       <v-col v-if="persoChoiced !== ''" class="col-10" >
         <v-simple-table>

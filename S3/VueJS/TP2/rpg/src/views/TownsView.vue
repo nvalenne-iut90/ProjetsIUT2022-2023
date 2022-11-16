@@ -5,9 +5,11 @@
 
         <div>
           <h1>Les villes</h1>
-          <label for="filteractive">filtrage possible : </label><input type="checkbox" v-model="filterActive" id="filteractive">
+          <label for="filteractive">filtrage possible : </label>
+          <input type="checkbox" v-model="filterActive" id="filteractive">
           <div v-if="filterActive">
-            <label for="filtertown">filtre : </label><input v-model="filter" id="filtertown">
+            <v-text-field v-model="filter"></v-text-field>
+<!--            <label for="filtertown">filtre : </label><input v-model="filter" id="filtertown">-->
           </div>
           <ul>
             <li v-for="(ville, index) in villesFiltre" :key="index">{{ville.nom}}</li>
