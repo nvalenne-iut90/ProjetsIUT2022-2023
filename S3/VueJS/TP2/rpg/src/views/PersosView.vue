@@ -3,12 +3,12 @@
     <v-row>
       <v-col class="col-2">
         <h1>Les personnages</h1>
-        <select v-model="persoChoiced" id="persos">
-          <option v-for="(perso, index) in persos" :key="index">{{perso.nom}}</option>
-        </select>
+<!--        <select v-model="persoChoiced" id="persos">-->
+<!--          <option v-for="(perso, index) in persos" :key="index">{{perso.nom}}</option>-->
+<!--        </select>-->
+        <v-select :items="selectItems" v-model="persoChoiced"></v-select>
       </v-col>
       <v-col v-if="persoChoiced !== ''" class="col-10" >
-        {{perso_choisi}}
         <v-simple-table>
           <thead>
           <tr>
@@ -28,12 +28,24 @@
             <td>
               <ul>
                 <li v-for="(emplacement, index) in perso_choisi.emplacements" :key="index">
-                  {{emplacement.nom}}[{{emplacement.items.length}}] :  {{emplacement.items}}
+                  {{emplacement.nom}}
+                  <span v-if="emplacement.items.length !== 0">
+                    [{{emplacement.items.length}}] : <span v-for="(item, indexItem) in emplacement.items" :key="indexItem">{{item.nom}}, </span>
+                  </span>
                 </li>
               </ul>
             </td>
           </tr>
-          <tr></tr>
+          <tr>
+            <td>{{perso_choisi.or}} or</td>
+            <td>
+              items achetés
+              <span v-if="perso_choisi.itemsAchetes.length !== 0">
+                [{{perso_choisi.itemsAchetes.length}}] :
+                  <span v-for="(itemAchete, indexItemBuyed) in perso_choisi.itemsAchetes" :key="indexItemBuyed">{{itemAchete.nom}}</span>
+              </span>
+            </td>
+          </tr>
           </tbody>
         </v-simple-table>
       </v-col>
@@ -55,6 +67,11 @@ export default {
     ...mapState(['persos']),
     perso_choisi() {
       return this.persos.find(p => p.nom === this.persoChoiced)
+    },
+    selectItems(){
+      let items = []
+      this.persos.forEach(p => items.push(p.nom))
+      return items
     }
   }
 }
