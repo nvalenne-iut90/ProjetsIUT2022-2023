@@ -39,7 +39,7 @@
               items achetés
               <span v-if="perso_choisi.itemsAchetes.length !== 0">
                 [{{perso_choisi.itemsAchetes.length}}] :
-                  <span v-for="(itemAchete, indexItemBuyed) in perso_choisi.itemsAchetes" :key="indexItemBuyed">{{itemAchete.nom}}</span>
+                <span v-for="(itemAchete, indexItemBuyed) in perso_choisi.itemsAchetes" :key="indexItemBuyed">{{itemAchete.nom}}</span>
               </span>
             </td>
           </tr>

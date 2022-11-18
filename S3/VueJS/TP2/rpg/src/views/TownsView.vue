@@ -8,8 +8,7 @@
           <label for="filteractive">filtrage possible : </label>
           <input type="checkbox" v-model="filterActive" id="filteractive">
           <div v-if="filterActive">
-            <v-text-field v-model="filter"></v-text-field>
-<!--            <label for="filtertown">filtre : </label><input v-model="filter" id="filtertown">-->
+            <v-text-field v-model="filter" placeholder="Filtre"></v-text-field>
           </div>
           <ul>
             <li v-for="(ville, index) in villesFiltre" :key="index">{{ville.nom}}</li>
