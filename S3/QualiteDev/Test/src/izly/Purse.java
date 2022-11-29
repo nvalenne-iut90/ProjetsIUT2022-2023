@@ -1,36 +1,40 @@
 package izly;
 
-public class Purse {
+import izly.exception.*;
 
+public class Purse {
     private double solde = 0;
     private double plafond;
-    private int nbOpMaxAuth;
+    public int dureeVieMax;
     private CodeSecret codeSecret;
 
-    public Purse(int nbOpMaxAuth, double plafond, CodeSecret codeSecret) {
+    public Purse(double plafond, int dureeVieMax, CodeSecret secretCode) {
         this.plafond = plafond;
-        this.nbOpMaxAuth = nbOpMaxAuth;
-        this.codeSecret = codeSecret;
+        this.dureeVieMax = dureeVieMax;
+        this.codeSecret = secretCode;
     }
 
     public double getSolde() {
         return solde;
     }
 
-    public void credite(double montant) throws DepassementPlafondInterditException, MontantNegatifnterditException, NbOperationMaxAtteindException {
-        if (montant < 0) throw new MontantNegatifnterditException();
-        if (nbOpMaxAuth <= 0) throw new NbOperationMaxAtteindException();
-        if (montant+solde > plafond) throw new DepassementPlafondInterditException();
+    public void credite(double montant, String codePin) throws OperationRejeteeException {
+        if (dureeVieMax <= 0) throw new OperationRejeteeException(new DureeVieDepassee());
+        if (montant < 0) throw new OperationRejeteeException(new MontantNegatifnterdit());
+        if (montant+solde > plafond) throw new OperationRejeteeException(new DepassementPlafondInterdit());
+        if (codeSecret.isBlocked()) throw new OperationRejeteeException(new CodeBloqueExeption());
+        if (!codeSecret.verifierCode(codePin)) throw new OperationRejeteeException(new CodeFauxExeption());
         solde += montant;
-        nbOpMaxAuth--;
+        dureeVieMax--;
     }
 
-    public void debite(double montant, String codePin) throws SoldeNegatifInterditException, MontantNegatifnterditException, NbOperationMaxAtteindException, CodeFauxException {
-        if (nbOpMaxAuth <= 0) throw new NbOperationMaxAtteindException();
-        if (montant < 0) throw new MontantNegatifnterditException();
-        if (montant > solde) throw new SoldeNegatifInterditException();
-        if (!codeSecret.verifierCode(codePin)) throw new CodeFauxException();
+    public void debite(double montant, String codePin) throws OperationRejeteeException {
+        if (dureeVieMax <= 0) throw new OperationRejeteeException(new DureeVieDepassee());
+        if (montant < 0) throw new OperationRejeteeException(new MontantNegatifnterdit());
+        if (montant > solde) throw new OperationRejeteeException(new SoldeNegatifInterdit());
+        if (codeSecret.isBlocked()) throw new OperationRejeteeException(new CodeBloqueExeption());
+        if (!codeSecret.verifierCode(codePin)) throw new OperationRejeteeException(new CodeFauxExeption());
         solde -= montant;
-        nbOpMaxAuth--;
+        dureeVieMax--;
     }
 }

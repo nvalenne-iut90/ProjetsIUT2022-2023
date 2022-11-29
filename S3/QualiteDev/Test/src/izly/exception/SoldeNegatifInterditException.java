@@ -1,4 +1,4 @@
-package izly;
+package izly.exception;
 
 public class SoldeNegatifInterditException extends Exception{
 }
